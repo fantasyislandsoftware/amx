@@ -2,15 +2,24 @@
 export type TTask = {
   id: number;
   name: string;
-  source: TSource;
-  pos: number;
+  code: TCode;
 };
 
-export type TSource = { type: number; code: any };
+export type TCode = {
+  type: EnumCodeType;
+  script: TScript;
+  codePointer: number;
+};
+export enum EnumCodeType {
+  "SCRIPT",
+  "MACHINE_CODE",
+}
+export type TScript = string[];
 
 /* Screen */
 export type TScreenInfo = {
   id: number;
+  parentId: number;
   name?: string;
   title: string;
   state: number;
@@ -19,13 +28,33 @@ export enum EnumScreenState {
   "CLOSED",
   "OPEN",
 }
-export type TScreen = { props: { info: TScreenInfo; windows: TWindow[] } };
-export type TOpenScreen = (setScreens: any) => void;
+export type TScreen = { props: { info: TScreenInfo } };
+export type TOpenScreen = (parentId: number, setScreens: any) => void;
 
 /* Window */
-export type TWindow = { title: string };
+export type TWindowInfo = {
+  id: number;
+  parentId: number;
+  name?: string;
+  title: string;
+  x: number;
+  y: number;
+  state: number;
+  content: EnumWindowContent;
+};
+export enum EnumWindowState {
+  "CLOSE",
+  "OPEN",
+}
+export enum EnumWindowContent {
+  "DEFAULT",
+  "FILE_MANAGER",
+}
+export type TWindow = { props: { info: TWindowInfo } };
+export type TOpenWindow = (setWindows: any) => void;
 
 /* States */
 export type TSetUpdate = (update: number) => void;
 export type TSetTasks = (tasks: TTask[]) => void;
 export type TSetScreens = (screens: TScreen[]) => void;
+export type TSetWindows = (windows: TWindow[]) => void;

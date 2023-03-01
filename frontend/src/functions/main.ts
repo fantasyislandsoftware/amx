@@ -1,72 +1,65 @@
 import { useEffect } from "react";
-import {
-  TOpenScreen,
-  TSetScreens,
-  TSetTasks,
-  TSetUpdate,
-  TTask,
-} from "../types";
+import { EnumCodeType, TSetUpdate, TTask } from "../types";
+import { createTask } from "./taskFunctions";
+import { openWindow } from "./windowFunctions";
+import { openScreen } from "./screenFunctions";
+import { useTaskStore } from "../stores/taskStore";
+import { workbenchScript } from "../scripts/workbenchScript";
+import { fileManagerScript } from "../scripts/fileManagerScript";
 
 export const useUpdate = (setUpdate: TSetUpdate) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setUpdate(Math.random());
-    }, 1000);
+    }, 1);
     return () => clearInterval(interval);
   }, []);
 };
 
-export const useTasks = (
-  tasks: TTask[],
-  update: number,
-  setTasks: TSetTasks,
-  setScreens: TSetScreens,
-  createTask: any,
-  openScreen: TOpenScreen
-) => {
+export const useTasks = (update: number) => {
   useEffect(() => {
-    //tasks.map((task: TTask) => {
-    //console.log(task.source.code[task.pos]);
-    //processCode(task.source.code, task.pos);
-    //});
-
-    let newTasks = tasks;
-    newTasks.map((task: TTask) => {
+    let tasks = useTaskStore.getState().tasks;
+    tasks.map((task: TTask) => {
       task = processCode(task);
     });
-    setTasks(newTasks);
+
+    useTaskStore.setState({ tasks: tasks });
     if (update === 0) {
-      createTask(0, setTasks);
-      openScreen(setScreens);
+      createTask("wb", {
+        type: EnumCodeType.SCRIPT,
+        script: workbenchScript,
+        codePointer: 0,
+      });
+      createTask("filemanager", {
+        type: EnumCodeType.SCRIPT,
+        codePointer: 0,
+        script: fileManagerScript,
+      });
+      createTask("filemanager2", {
+        type: EnumCodeType.SCRIPT,
+        codePointer: 0,
+        script: fileManagerScript,
+      });
     }
   }, [update]);
 };
 
 const processCode = (task: TTask) => {
-  const el = task.source.code[task.pos].split(" ");
-  console.log(el);
+  const el = task.code.script[task.code.codePointer].split(" ");
+  if (el[0] === "openWBWindow") {
+    openWindow("FileManager", "filemanager", null);
+  }
+  if (el[0] === "openWBScreen") {
+    openScreen("Workbench", "wb", task.id);
+  }
   if (el[0] === "jmp") {
-    const x = task.source.code.indexOf(`${el[1]}:`);
+    const x = task.code.script.indexOf(`${el[1]}:`);
     if (x !== -1) {
-        task.pos = x-1;
-      //console.log(x);
+      task.code.codePointer = x - 1;
     }
   }
 
   /*  */
-  task.pos++;
-  //if (task.pos > task.source.code.length - 1) {
-  //  task.pos = 0;
-  //}
+  task.code.codePointer++;
   return task;
-  /*const line = code[pos];
-  console.log(line);
-
-  const el = line.split(" ");
-  if (el[0] === "jmp") {
-    const x = code.indexOf(`${el[1]}:`);
-    if (x !== -1) {
-      //
-      //
-    }*/
 };
