@@ -6,9 +6,9 @@ export type TTask = {
 };
 
 export type TCode = {
-  type: EnumCodeType;
-  script: TScript;
+  type: EnumCodeType;  
   codePointer: number;
+  script: { name: string; lines: string[] } | undefined;
 };
 export enum EnumCodeType {
   "SCRIPT",

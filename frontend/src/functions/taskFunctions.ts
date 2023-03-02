@@ -1,7 +1,9 @@
+import { getScript } from "../api/functions/getScript";
 import { useTaskStore } from "../stores/taskStore";
-import { EnumCodeType, TCode, TScript, TTask } from "../types";
+import { TCode, TTask } from "../types";
 
-export const createTask = (name : string, code : TCode) => {
+export const createTask = async (name: string, code: TCode) => {
+  code.script.lines = await getScript(code.script.name);
   const latestTaskId = useTaskStore.getState().latestTaskId;
   const newTask: TTask = { id: latestTaskId, name: name, code: code };
   const tasks = useTaskStore.getState().tasks;

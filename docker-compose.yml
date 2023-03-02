@@ -12,7 +12,7 @@ services:
       - ./backend/nodemon.json:/home/node/app/nodemon.json
     container_name: amx
     expose:
-      - '12345'
+      - '9001'
     ports:
-      - '12345:12345'
+      - '9001:9001'
     command: npm run dev

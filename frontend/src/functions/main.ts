@@ -11,7 +11,7 @@ export const useUpdate = (setUpdate: TSetUpdate) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setUpdate(Math.random());
-    }, 1);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 };
@@ -27,25 +27,42 @@ export const useTasks = (update: number) => {
     if (update === 0) {
       createTask("wb", {
         type: EnumCodeType.SCRIPT,
-        script: workbenchScript,
         codePointer: 0,
+        script: { name: "workbench", lines: [] },
       });
-      createTask("filemanager", {
+      /*createTask("filemanager", {
         type: EnumCodeType.SCRIPT,
         codePointer: 0,
-        script: fileManagerScript,
+        scriptName: "fileManager",
       });
       createTask("filemanager2", {
         type: EnumCodeType.SCRIPT,
         codePointer: 0,
-        script: fileManagerScript,
-      });
+        scriptName: "fileManager",
+      });*/
     }
   }, [update]);
 };
 
 const processCode = (task: TTask) => {
-  const el = task.code.script[task.code.codePointer].split(" ");
+  /* Get current line */
+  const line = task.code.script.lines[task.code.codePointer];
+  //console.log(line);
+
+  if (line) {
+    /* Function of label? */
+
+    if (line.search("\\(") || line.search("\\)")) {
+      console.log("function");
+    }
+    if (line.search(":")) {
+      console.log("label");
+    }
+  }
+
+  //console.log(task.code.codePointer);
+
+  /*const el = task.code.script[task.code.codePointer].split(" ");
   if (el[0] === "openWBWindow") {
     openWindow("FileManager", "filemanager", null);
   }
@@ -57,7 +74,7 @@ const processCode = (task: TTask) => {
     if (x !== -1) {
       task.code.codePointer = x - 1;
     }
-  }
+  }*/
 
   /*  */
   task.code.codePointer++;

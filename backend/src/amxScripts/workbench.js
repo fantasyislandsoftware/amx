@@ -1,0 +1,3 @@
+openWBScreen();
+loop:
+    jmp(loop);
