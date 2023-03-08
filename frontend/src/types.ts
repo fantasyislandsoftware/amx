@@ -6,7 +6,7 @@ export type TTask = {
 };
 
 export type TCode = {
-  type: EnumCodeType;  
+  type: EnumCodeType;
   codePointer: number;
   script: { name: string; lines: string[] } | undefined;
 };
@@ -58,3 +58,10 @@ export type TSetUpdate = (update: number) => void;
 export type TSetTasks = (tasks: TTask[]) => void;
 export type TSetScreens = (screens: TScreen[]) => void;
 export type TSetWindows = (windows: TWindow[]) => void;
+
+/* Function */
+export enum EnumFuncName {
+  openWBScreen = "openWBScreen",
+  openWBWindow = "openWBWindow",
+  jmp = "jmp",
+}

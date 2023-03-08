@@ -1,4 +1,3 @@
-openWBWindow();
-setWidget(fileManager);
+openWBWindow("FileManager", "fileManager", "fileManager");
 loop:
     jmp(loop);

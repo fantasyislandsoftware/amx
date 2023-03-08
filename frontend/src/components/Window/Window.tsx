@@ -1,10 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
-import { TWindow } from "../types";
+import React, { CSSProperties, FC, useEffect, useState } from "react";
+import { TWindow } from "../../types";
+import FileManager from "../FileManager";
+import { colours } from "../../utilities/colours/wb";
+import { styleWindowContainer, styleWindowTitleBar, windowStyleContent } from "./WIndowStyle";
 
 interface WindowProps {}
 
 export const Window: FC<WindowProps & TWindow> = ({ props }) => {
-
   const position = { x: props.info.x, y: props.info.y };
 
   const [done, setDone] = useState(false);
@@ -65,15 +67,36 @@ export const Window: FC<WindowProps & TWindow> = ({ props }) => {
   }, [done]);
 
   return (
-    <div
-      id={id}
-      className="window_content"
-      style={{ left: `${position.x}px`, top: `${position.y}px` }}
-    >
-      <div id={`${id}_header`} className="window_header">
-        {'hello'}
+    <div id={id} style={styleWindowContainer(position.x, position.y, 400, 200)}>
+      <div id={`${id}_header`} style={styleWindowTitleBar()}>
+        <div className="buttons">
+          <div className="close">
+            <a className="closebutton" href="#">
+              <span>
+                <strong>x</strong>
+              </span>
+            </a>
+          </div>
+          <div className="minimize">
+            <a className="minimizebutton" href="#">
+              <span>
+                <strong>&ndash;</strong>
+              </span>
+            </a>
+          </div>
+          <div className="zoom">
+            <a className="zoombutton" href="#">
+              <span>
+                <strong>+</strong>
+              </span>
+            </a>
+          </div>
+        </div>
+        {props.info.title}
       </div>
-      {'content'}
+      <div style={windowStyleContent()}>
+        <FileManager/>
+      </div>
     </div>
   );
 };

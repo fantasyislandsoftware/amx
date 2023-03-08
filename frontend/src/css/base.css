@@ -1,3 +1,13 @@
+@font-face {
+    font-family: "zx-spectrum";
+    src: local("zx-spectrum"), url(../fonts/zx_spectrum-7.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "amiga";
+    src: local("amiga"), url(../fonts/AmigaTopazUnicodeRus.ttf) format("truetype");
+}
+
 html,
 body,
 #root {
@@ -5,4 +15,6 @@ body,
     background-color: black;
     color: white;
     height: 100%;
+    /*font-family: "amiga";*/
+    font-family: HelveticaNeue, 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;
 }

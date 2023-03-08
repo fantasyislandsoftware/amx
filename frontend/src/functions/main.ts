@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { EnumCodeType, TSetUpdate, TTask } from "../types";
+import { EnumCodeType, EnumFuncName, TSetUpdate, TTask } from "../types";
 import { createTask } from "./taskFunctions";
 import { openWindow } from "./windowFunctions";
 import { openScreen } from "./screenFunctions";
 import { useTaskStore } from "../stores/taskStore";
 import { workbenchScript } from "../scripts/workbenchScript";
 import { fileManagerScript } from "../scripts/fileManagerScript";
+import { jmp } from "./general";
 
 export const useUpdate = (setUpdate: TSetUpdate) => {
   useEffect(() => {
@@ -30,18 +31,39 @@ export const useTasks = (update: number) => {
         codePointer: 0,
         script: { name: "workbench", lines: [] },
       });
-      /*createTask("filemanager", {
+      createTask("filemanager", {
         type: EnumCodeType.SCRIPT,
         codePointer: 0,
-        scriptName: "fileManager",
+        script: { name: "fileManager", lines: [] },
       });
-      createTask("filemanager2", {
+      createTask("filemanager", {
         type: EnumCodeType.SCRIPT,
         codePointer: 0,
-        scriptName: "fileManager",
-      });*/
+        script: { name: "fileManager", lines: [] },
+      });
     }
   }, [update]);
+};
+
+const processFunction = (task: TTask, funcName: string, params: string[]) => {
+  for (let n = 0; n < params.length; n++) {
+    params[n] = params[n].replace(/"/g, '').trim();
+  }
+  //console.log(funcName);
+  switch (funcName) {
+    case EnumFuncName.openWBScreen:
+      openScreen("Workbench", "wb", task.id);
+      break;
+    case EnumFuncName.openWBWindow:
+      console.log(params);
+      openWindow("File explorer", "file_explorer", 0);
+      break;
+    case EnumFuncName.jmp:
+      task = jmp(task, params[0]);
+      break;
+    default:
+  }
+  return task;
 };
 
 const processCode = (task: TTask) => {
@@ -51,30 +73,22 @@ const processCode = (task: TTask) => {
 
   if (line) {
     /* Function of label? */
-
-    if (line.search("\\(") || line.search("\\)")) {
-      console.log("function");
+    if (line.indexOf("(") > -1 || line.indexOf(")") > -1) {
+      /* Get function params */
+      const start = line.indexOf("(");
+      const end = line.indexOf(")");
+      const funcName = line.substring(0, start);
+      const params_str = line.substring(start + 1, end).trim();
+      let params: string[] = [];
+      if (params_str.length > 0) {
+        params = params_str.split(",");
+      }
+      task = processFunction(task, funcName, params);
     }
     if (line.search(":")) {
-      console.log("label");
+      //console.log("label");
     }
   }
-
-  //console.log(task.code.codePointer);
-
-  /*const el = task.code.script[task.code.codePointer].split(" ");
-  if (el[0] === "openWBWindow") {
-    openWindow("FileManager", "filemanager", null);
-  }
-  if (el[0] === "openWBScreen") {
-    openScreen("Workbench", "wb", task.id);
-  }
-  if (el[0] === "jmp") {
-    const x = task.code.script.indexOf(`${el[1]}:`);
-    if (x !== -1) {
-      task.code.codePointer = x - 1;
-    }
-  }*/
 
   /*  */
   task.code.codePointer++;
