@@ -1,0 +1,16 @@
+
+@font-face {
+    font-family: "amiga";
+    src: local("amiga"), url(../fonts/AmigaTopazUnicodeRus.ttf) format("truetype");
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    background-color: grey;
+    color: white;
+    height: 100%;
+    font-family: "amiga";
+    /*font-family: HelveticaNeue, 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;*/
+}

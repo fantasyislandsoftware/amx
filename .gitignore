@@ -1,2 +1,4 @@
 backend/node_modules
 frontend/node_modules
+backend/ndk/NDK_3.9
+data
