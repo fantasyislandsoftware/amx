@@ -22,7 +22,6 @@ export function dragElement(
     e = e || window.event;
     e.preventDefault();
     pos4 = e.clientY;
-    //if (pos4 > 200) return;
     document.onmouseup = closeDragElement;
     document.onmousemove = elementDrag;
   }
@@ -32,7 +31,7 @@ export function dragElement(
     e.preventDefault();
     pos2 = pos4 - e.clientY;
     pos4 = e.clientY;
-    elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+    elmnt.style.top = elmnt.offsetTop - pos2 + "px";    
     callback(elmnt.offsetTop - pos2);
   };
 

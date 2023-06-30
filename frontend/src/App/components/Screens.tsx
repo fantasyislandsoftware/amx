@@ -1,17 +1,17 @@
 import React, { FC } from "react";
 import Screen from "./Screen";
-import { TScreen } from "../interfaces/screen";
+import { useIntuitionStore } from "../stores/useIntuitionStore";
 
 interface Props {
-  screens: TScreen[];
   sendMessage: (Message: any) => void;
 }
 
-const Screens: FC<Props> = ({ screens, sendMessage }) => {
+const Screens: FC<Props> = ({}) => {
+  const { screens } = useIntuitionStore((state) => state);
   return (
     <>
       {screens.map((screen, index) => {
-        return <Screen key={index} screen={screen} sendMessage={sendMessage} />;
+        return <Screen key={index} screen={screen} />;
       })}
     </>
   );

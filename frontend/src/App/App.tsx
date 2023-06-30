@@ -1,78 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Screens from "./components/Screens";
 import "./css/base.css";
 import { compileApps } from "../api/functions/post/compileApps";
-import {
-  EnumColorMax,
-  EnumScreenType,
-  ScreenModeLowRes,
-  TScreen,
-} from "./interfaces/screen";
-import { workbench, workbench2 } from "./presets/screens";
+import { TScreenMessage } from "./interfaces/screen";
+import { loadFonts } from "./functions/fonts";
+import { useMouseStore } from "./stores/useMouseStore";
+import { EnumMouseButton } from "./interfaces/input";
+import { useIntuitionStore } from "./stores/useIntuitionStore";
+import { main, startTask } from "./functions/tasks";
+import { useTaskStore } from "./stores/useTaskStore";
+import { loadFile } from "./functions/fileIO";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false);
-  const [screens, setScreens] = useState<TScreen[]>([workbench, workbench2]);
 
+  const { tasks } = useTaskStore((state) => state);
+  const { mouse } = useMouseStore((state) => state);
+  const { screens, setScreens } = useIntuitionStore((state) => state);
+  //const { selectedOffset } = useIntuitionStore((state) => state);
+  const [runMode, setRunMode] = useState<"normal" | "debug">("debug");
   const test = async () => {
     const x = await compileApps();
-    console.log(x);
   };
 
-  //const x = test();
-
-  function listFonts() {
-    let { fonts } = document;
+  const sendMessage = (message: TScreenMessage) => {
     //@ts-ignore
-    const it = fonts.entries();
-
-    let arr = [];
-    let done = false;
-
-    while (!done) {
-      const font = it.next();
-      if (!font.done) {
-        arr.push(font.value[0]);
-      } else {
-        done = font.done;
-      }
-    }
-  }
-
-  const loadFont = async () => {
-    var amigaFont = new FontFace(
-      "amiga",
-      "url(../fonts/AmigaTopazUnicodeRus.ttf)"
-    );
-    const font = await amigaFont.load();
-
-    if (font.status === "loaded") {
-      //@ts-ignore
-      document.fonts.add(font);
-      setLoaded(true);
-    }
-    //
+    //screens[message.screenId][message.key] = message.value;
+    //screens[0].y = screens[0].y + message.value;
+    //setScreens([...screens]);
   };
 
-  loadFont();
+  loadFonts().then(() => {
+    setLoaded(true);
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const fileInfo = await loadFile("/data/js/workbench.js");
+      startTask(fileInfo);
+      return () => clearInterval(timer);
+    }, 1000);
+
+    if (runMode === "debug") {
+      const interval = setInterval(() => {
+        main(tasks, screens, setScreens);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      const render = () => {
+        main(tasks, screens, setScreens);
+        requestAnimationFrame(render);
+      };
+      render();
+    }
+  }, []);
 
   if (!loaded) {
     return null;
   } else {
-    listFonts();
-
-    const sendMessage = (message: any) => {
-      console.log(message);
-      screens[message.screenId].y = message.value;
-      setScreens([...screens]);
-    };
-
-    return (
-      <>
-        <div>AMX</div>
-        <Screens screens={screens} sendMessage={sendMessage} />
-      </>
-    );
+    return <Screens sendMessage={sendMessage} />;
   }
 };
 

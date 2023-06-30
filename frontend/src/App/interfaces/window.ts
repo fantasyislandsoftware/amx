@@ -4,6 +4,6 @@ export type TWindow = {
     y: number;
     width: number;
     height: number;
-    titleBar: { text: string; fontSize: number };
+    titleBar: { text: string; fontSize: number, padding: number };
     zOrder: number;
   };
