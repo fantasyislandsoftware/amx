@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import Screen from "./Screen";
-import { useIntuitionStore } from "../stores/useIntuitionStore";
+import { useIntuitionStore } from "../../stores/useIntuitionStore";
+import { TSettings } from "../../interfaces/settings";
 
 interface Props {
   sendMessage: (Message: any) => void;

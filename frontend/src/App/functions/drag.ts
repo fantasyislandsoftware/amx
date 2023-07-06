@@ -15,8 +15,6 @@ export function dragElement(
   } else {
     elmnt.onmousedown = null;
   }
-  
-
 
   function dragMouseDown(e: any) {
     e = e || window.event;
@@ -31,7 +29,7 @@ export function dragElement(
     e.preventDefault();
     pos2 = pos4 - e.clientY;
     pos4 = e.clientY;
-    elmnt.style.top = elmnt.offsetTop - pos2 + "px";    
+    elmnt.style.top = elmnt.offsetTop - pos2 + "px";
     callback(elmnt.offsetTop - pos2);
   };
 

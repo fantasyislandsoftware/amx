@@ -2,9 +2,10 @@ import React, { FC } from "react";
 import { TScreen } from "../interfaces/screen";
 import { useMouseStore } from "../stores/useMouseStore";
 import { useIntuitionStore } from "../stores/useIntuitionStore";
+import { TContext } from "../interfaces/canvas";
 
 interface Props {
-  ctx: any;
+  ctx: TContext;
   screen: TScreen;
 }
 

@@ -3,9 +3,10 @@ import { FC } from "react";
 import { useMouseStore } from "../stores/useMouseStore";
 import { TScreen } from "../interfaces/screen";
 import { useIntuitionStore } from "../stores/useIntuitionStore";
+import { TContext } from "../interfaces/canvas";
 
 interface Props {
-  ctx: any;
+  ctx: TContext;
   screen: TScreen;
   enabled: boolean;
 }

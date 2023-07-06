@@ -4,6 +4,7 @@ import {
   EnumScreenType,
   ScreenModeHiRes,
   ScreenModeLowRes,
+  ScreenModeSuperHiRes,
   TScreen,
 } from "../interfaces/screen";
 
@@ -43,7 +44,7 @@ export const workbench = (id: number): TScreen => {
         y: 50,
         width: 100,
         height: 100,
-        titleBar: { text: "Window 1", fontSize: 16, padding: 1 },
+        titleBar: { text: "Window 1" },
         zOrder: 0,
       },
       {
@@ -52,7 +53,7 @@ export const workbench = (id: number): TScreen => {
         y: 80,
         width: 100,
         height: 100,
-        titleBar: { text: "Window 2", fontSize: 16, padding: 1 },
+        titleBar: { text: "Window 2" },
         zOrder: 1,
       },
     ],
