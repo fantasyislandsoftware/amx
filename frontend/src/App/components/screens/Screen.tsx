@@ -11,10 +11,15 @@ import { useIntuitionStore } from "../../stores/useIntuitionStore";
 import { useMouseStore } from "../../stores/useMouseStore";
 import { EnumMouseButton } from "../../interfaces/input";
 import { findWindow, windowIdToIndex } from "../../functions/windows";
-import { TCalcElements, TCalcWindow } from "../../interfaces/elements";
 import { calcScreenElements } from "../../functions/calcElements/calcScreenElements";
 import { calcWindowElements } from "../../functions/calcElements/calcWindowElements";
-import { TSettings } from "../../interfaces/settings";
+import {
+  EnumMessageAction,
+  EnumMessageObj,
+  TMessage,
+} from "../../interfaces/message";
+import { EnumButtonState } from "../../interfaces/button";
+import { screenIdToIndex } from "../../functions/screen";
 
 const ScreenContainer: any = styled.div`
   background: black;
@@ -27,9 +32,10 @@ const ScreenContainer: any = styled.div`
 
 interface Props {
   screen: TScreen;
+  sendMessage: (Message: TMessage) => void;
 }
 
-const Screen: FC<Props> = ({ screen }) => {
+const Screen: FC<Props> = ({ screen, sendMessage }) => {
   const [canvas, setCanvas] = useState(null);
   const canvasRef = useRef(null);
   const [ctx, setCtx] = useState(null);
@@ -39,12 +45,26 @@ const Screen: FC<Props> = ({ screen }) => {
     useIntuitionStore((state) => state);
   const { mouse, setMouse } = useMouseStore((state) => state);
   const [windowOffset, setWindowOffset] = useState({ x: 0, y: 0 });
+  const [windowDrag, setWindowDrag] = useState(true);
 
   const screenProps = calcScreenElements(screen);
   const windowProps = calcWindowElements(screen);
 
-  const convertScreenIdToIndex = (screenId: number) => {
-    return screens.findIndex((screen) => screen.id === screenId);
+  const selectedWindowId = findWindow(screen.windows, mouse.px, mouse.py);
+  const selectedWindowIndex = windowIdToIndex(screen.windows, selectedWindowId);
+
+  const inBoundary = (
+    mx: number,
+    my: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) => {
+    if (mx > x && mx < x + width && my > y && my < y + height) {
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
@@ -54,7 +74,7 @@ const Screen: FC<Props> = ({ screen }) => {
       if (ctx) {
         dragElement(canvasRef.current, true, (top) => {
           if (mouse.py < screenProps.titleBar?.height) {
-            const index = convertScreenIdToIndex(screen.id);
+            const index = screenIdToIndex(screen.id);
             screens[index].y = screens[index].y + top;
             if (screens[index].y < 0) {
               screens[index].y = 0;
@@ -77,17 +97,23 @@ const Screen: FC<Props> = ({ screen }) => {
 
     /* Screen */
     setSelectedScreen(screen.id);
-    const _selectedWindow = windowIdToIndex(
-      screen.windows,
-      findWindow(screen.windows, mouse.px, mouse.py)
-    );
 
     /* Window */
-    setSelectedWindow(_selectedWindow);
-    if (_selectedWindow !== null) {
+    setSelectedWindow({ index: selectedWindowIndex, id: selectedWindowId });
+    if (selectedWindowIndex !== null) {
       setWindowOffset({
-        x: mouse.px - screen.windows[_selectedWindow].x,
-        y: mouse.py - screen.windows[_selectedWindow].y,
+        x: mouse.px - screen.windows[selectedWindowIndex].x,
+        y: mouse.py - screen.windows[selectedWindowIndex].y,
+      });
+
+      /* Window Buttons */
+      windowProps[selectedWindowIndex].titleBar.buttons.map((button, index) => {
+        const { x, y, width, height } = button;
+        if (inBoundary(mouse.px, mouse.py, x, y, width, height)) {
+          screen.windows[selectedWindowIndex].titleBar.buttons[index].state =
+            EnumButtonState.DOWN;
+          setWindowDrag(false);
+        }
       });
     }
   };
@@ -100,6 +126,31 @@ const Screen: FC<Props> = ({ screen }) => {
       cy: mouse.cy,
       leftButton: EnumMouseButton.UP,
     });
+    setWindowDrag(true);
+
+    const props = windowProps[selectedWindowIndex];
+    if (props) {
+      props.titleBar.buttons.map((button, index) => {
+        screen.windows[selectedWindowIndex].titleBar.buttons[index].state =
+          EnumButtonState.UP;
+      });
+    }
+
+    /* Window Buttons */
+    if (props) {
+      props.titleBar.buttons.map((button, index) => {
+        const { x, y, width, height } = button;
+        if (inBoundary(mouse.px, mouse.py, x, y, width, height)) {
+          sendMessage({
+            id: selectedWindowId,
+            parentId: screen.id,
+            obj: EnumMessageObj.WINDOW,
+            action: EnumMessageAction.CLOSE,
+          });
+          setSelectedWindow(null);
+        }
+      });
+    }
   };
 
   const mouseMove = (e: any) => {
@@ -113,13 +164,16 @@ const Screen: FC<Props> = ({ screen }) => {
       cy: e.clientY,
       leftButton: mouse.leftButton,
     });
-    if (
-      selectedWindow !== null &&
-      windowOffset.y < windowProps[selectedWindow].titleBar.height &&
-      mouse.leftButton === EnumMouseButton.DOWN
-    ) {
-      screen.windows[selectedWindow].x = mouse.px - windowOffset.x;
-      screen.windows[selectedWindow].y = mouse.py - windowOffset.y;
+    if (selectedWindow !== null && windowDrag) {
+      if (selectedWindow.index !== null) {
+        if (
+          windowOffset.y < windowProps[selectedWindow.index].titleBar.height &&
+          mouse.leftButton === EnumMouseButton.DOWN
+        ) {
+          screen.windows[selectedWindow.index].x = mouse.px - windowOffset.x;
+          screen.windows[selectedWindow.index].y = mouse.py - windowOffset.y;
+        }
+      }
     }
   };
 

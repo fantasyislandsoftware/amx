@@ -59,5 +59,3 @@ export const ScreenModeSuperHiRes: TypeScreenMode = {
   height: 480,
   bitDepth: EnumBitDepth.BIT_DEPTH_12,
 };
-
-export type TScreenMessage = { screenId: number; key: string; value: any };

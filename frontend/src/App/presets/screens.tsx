@@ -1,4 +1,5 @@
 import { _12BitColour } from "../functions/colour";
+import { EnumButtonState } from "../interfaces/button";
 import {
   EnumColorMax,
   EnumScreenType,
@@ -7,6 +8,7 @@ import {
   ScreenModeSuperHiRes,
   TScreen,
 } from "../interfaces/screen";
+import { CloseButton, OrderButton } from "./buttons";
 
 export const amx = (id: number): TScreen => {
   return {
@@ -22,6 +24,9 @@ export const amx = (id: number): TScreen => {
   };
 };
 
+const closeButton = new CloseButton();
+const orderButton = new OrderButton();
+
 export const workbench = (id: number): TScreen => {
   return {
     id: id,
@@ -31,7 +36,7 @@ export const workbench = (id: number): TScreen => {
     palette: [
       _12BitColour(15, 15, 15),
       _12BitColour(0, 0, 0),
-      _12BitColour(0, 0, 15),
+      _12BitColour(0, 6, 15),
       _12BitColour(10, 10, 10),
     ],
     titleBar: { text: "Workbench", fontSize: 16, padding: 1 },
@@ -44,16 +49,23 @@ export const workbench = (id: number): TScreen => {
         y: 50,
         width: 100,
         height: 100,
-        titleBar: { text: "Window 1" },
+        titleBar: {
+          text: "Window 1",
+          buttons: [closeButton.get(), orderButton.get()],
+        },
         zOrder: 0,
       },
+      null,
       {
-        id: 1,
+        id: 2,
         x: 80,
         y: 80,
-        width: 100,
+        width: 200,
         height: 100,
-        titleBar: { text: "Window 2" },
+        titleBar: {
+          text: "Window 2",
+          buttons: [closeButton.get(), orderButton.get()],
+        },
         zOrder: 1,
       },
     ],

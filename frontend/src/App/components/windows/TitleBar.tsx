@@ -1,12 +1,10 @@
 import React, { FC } from "react";
-import { TWindow } from "../../interfaces/window";
 import { useIntuitionStore } from "../../stores/useIntuitionStore";
-import { TScreen } from "../../interfaces/screen";
-import Close from "../Close";
-import Button from "../Button";
+import Button from "../buttons/Button";
 import { TContext } from "../../interfaces/canvas";
 import { TCalcWindowElement } from "../../functions/calcElements/calcWindowElements";
-import { closeIcon } from "../../functions/drawElements/closeIcon";
+import { closeIcon } from "../../functions/vectorGfx/closeIcon";
+import Buttons from "../buttons/Buttons";
 
 interface Props {
   ctx: TContext;
@@ -16,9 +14,13 @@ interface Props {
 
 const TitleBar: FC<Props> = ({ ctx, palette, windowProps }) => {
   const { settings, selectedWindow } = useIntuitionStore((state) => state);
+  let isSelected = false;
+  if (selectedWindow !== null) {
+    isSelected = selectedWindow.id === windowProps.general.id;
+  }
   const render = () => {
     /* Bar */
-    ctx.fillStyle = palette[selectedWindow === windowProps.general.id ? 2 : 3];
+    ctx.fillStyle = palette[isSelected ? 2 : 3];
     ctx.fillRect(
       windowProps.titleBar.x,
       windowProps.titleBar.y,
@@ -49,12 +51,11 @@ const TitleBar: FC<Props> = ({ ctx, palette, windowProps }) => {
 
   return (
     <>
-      /* Close button */
-      <Button
+      <Buttons
         ctx={ctx}
-        palette={palette}
-        buttonProps={windowProps.titleBar.button.close}
-        icon={closeIcon}
+        isSelected={isSelected}
+        palette={palette}        
+        buttonProps={windowProps.titleBar.buttons}
       />
     </>
   );

@@ -3,6 +3,11 @@ import { TScreen } from "../interfaces/screen";
 import { amx } from "../presets/screens";
 import { TSettings } from "../interfaces/settings";
 
+type SelectedWindow = {
+  index: number | null;
+  id: number | null;
+};
+
 export interface IntuitionStore {
   settings: TSettings;
   setSettings: (settings: TSettings) => void;
@@ -12,8 +17,8 @@ export interface IntuitionStore {
   setSelectedScreen: (selectedScreen: number) => void;
   nextAvailScreenId: number;
   setNextAvailScreenId: (nextAvailScreenId: number) => void;
-  selectedWindow: number;
-  setSelectedWindow: (selectedWindow: number) => void;
+  selectedWindow: SelectedWindow | null;
+  setSelectedWindow: (selectedWindow: SelectedWindow | null) => void;
 }
 
 export const useIntuitionStore = create<IntuitionStore>((set) => ({

@@ -13,14 +13,16 @@ const Windows: FC<Props> = ({ ctx, palette, windowProps }) => {
   return (
     <>
       {windowProps.map((windowProp, index) => {
-        return (
-          <Window
-            key={index}
-            ctx={ctx}
-            palette={palette}
-            windowProps={windowProp}
-          />
-        );
+        if (windowProp !== undefined) {
+          return (
+            <Window
+              key={index}
+              ctx={ctx}
+              palette={palette}
+              windowProps={windowProp}
+            />
+          );
+        }
       })}
     </>
   );
