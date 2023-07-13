@@ -1,13 +1,14 @@
 import { TIcon } from "./icons";
+import { EnumMessageAction } from "./message";
 
 export type TButton = {
-    name : string;
-    text : string;
-    icon : TIcon;
-    state : EnumButtonState;
-}
+  text: string;
+  action: EnumMessageAction;
+  icon: TIcon;
+  state: EnumButtonState;
+};
 
 export enum EnumButtonState {
-    UP,
-    DOWN,
+  UP,
+  DOWN,
 }

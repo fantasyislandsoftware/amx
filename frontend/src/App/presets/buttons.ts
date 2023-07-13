@@ -1,13 +1,14 @@
 import { closeIcon } from "../functions/vectorGfx/closeIcon";
 import { orderIcon } from "../functions/vectorGfx/orderIcon";
-import { EnumButtonState } from "../interfaces/button";
+import { EnumButtonState, TButton } from "../interfaces/button";
+import { EnumMessageAction } from "../interfaces/message";
 
 export class CloseButton {
   constructor() {}
-  get() {
+  get(): TButton {
     return {
-      name: "close",
       text: "Close",
+      action: EnumMessageAction.CLOSE,
       icon: closeIcon,
       state: EnumButtonState.UP,
     };
@@ -16,10 +17,10 @@ export class CloseButton {
 
 export class OrderButton {
   constructor() {}
-  get() {
+  get(): TButton {
     return {
-      name: "order",
       text: "Order",
+      action: EnumMessageAction.ORDER,
       icon: orderIcon,
       state: EnumButtonState.UP,
     };

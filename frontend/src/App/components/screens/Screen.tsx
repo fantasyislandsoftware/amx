@@ -32,10 +32,10 @@ const ScreenContainer: any = styled.div`
 
 interface Props {
   screen: TScreen;
-  sendMessage: (Message: TMessage) => void;
+  processMessage: (Message: TMessage) => void;
 }
 
-const Screen: FC<Props> = ({ screen, sendMessage }) => {
+const Screen: FC<Props> = ({ screen, processMessage }) => {
   const [canvas, setCanvas] = useState(null);
   const canvasRef = useRef(null);
   const [ctx, setCtx] = useState(null);
@@ -128,26 +128,28 @@ const Screen: FC<Props> = ({ screen, sendMessage }) => {
     });
     setWindowDrag(true);
 
-    const props = windowProps[selectedWindowIndex];
-    if (props) {
-      props.titleBar.buttons.map((button, index) => {
-        screen.windows[selectedWindowIndex].titleBar.buttons[index].state =
-          EnumButtonState.UP;
-      });
-    }
+    /* Release all buttons */
+    screen.windows.map((window, index) => {
+      let win = screen.windows[index];
+      if (win !== null) {
+        win.titleBar.buttons.map((button, index) => {
+          button.state = EnumButtonState.UP;
+        });
+      }
+    });
 
     /* Window Buttons */
+    const props = windowProps[selectedWindowIndex];
     if (props) {
       props.titleBar.buttons.map((button, index) => {
         const { x, y, width, height } = button;
         if (inBoundary(mouse.px, mouse.py, x, y, width, height)) {
-          sendMessage({
+          processMessage({
             id: selectedWindowId,
             parentId: screen.id,
             obj: EnumMessageObj.WINDOW,
-            action: EnumMessageAction.CLOSE,
+            action: button.action,
           });
-          setSelectedWindow(null);
         }
       });
     }

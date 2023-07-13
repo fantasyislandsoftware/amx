@@ -3,6 +3,7 @@ import { TScreen } from "../../interfaces/screen";
 import { useIntuitionStore } from "../../stores/useIntuitionStore";
 import { EnumButtonState } from "../../interfaces/button";
 import { TIcon } from "../../interfaces/icons";
+import { EnumMessageAction } from "../../interfaces/message";
 
 export type TCalcButtonElement = {
   x: number;
@@ -11,6 +12,7 @@ export type TCalcButtonElement = {
   height: number;
   state: EnumButtonState;
   icon: TIcon;
+  action : EnumMessageAction;
 };
 
 export type TCalcWindowElement = {
@@ -95,6 +97,7 @@ export const calcWindowElements = (screen: TScreen): TCalcWindowElement[] => {
                 height: titleBarHeight - 2,
                 state: button.state,
                 icon: button.icon,
+                action: button.action,
               };
             }),
           }

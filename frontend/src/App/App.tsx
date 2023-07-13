@@ -11,9 +11,7 @@ import { _12BitColour } from "./functions/colour";
 import { TMessage } from "./interfaces/message";
 import { screenIdToIndex } from "./functions/screen";
 import { windowIdToIndex } from "./functions/windows";
-import { EnumButtonState } from "./interfaces/button";
-import { set } from "lodash";
-import { calcWindowElements } from "./functions/calcElements/calcWindowElements";
+import { processMessage } from "./functions/message";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false);
@@ -22,17 +20,6 @@ const App = () => {
   const [runMode] = useState<"normal" | "debug">("debug");
   const test = async () => {
     const x = await compileApps();
-  };
-
-  const sendMessage = (message: TMessage) => {
-
-    const screenIndex = screenIdToIndex(message.parentId);
-    const windowIndex = windowIdToIndex(
-      screens[message.parentId].windows,
-      message.id
-    );
-    screens[screenIndex].windows[windowIndex] = null;
-    setScreens(screens);
   };
 
   loadFonts().then(() => {
@@ -63,7 +50,7 @@ const App = () => {
   if (!loaded) {
     return null;
   } else {
-    return <Screens sendMessage={sendMessage} />;
+    return <Screens processMessage={processMessage} />;
   }
 };
 

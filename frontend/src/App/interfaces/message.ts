@@ -5,6 +5,7 @@ export enum EnumMessageObj {
 
 export enum EnumMessageAction {
   CLOSE,
+  ORDER
 }
 
 export type TMessage = {
