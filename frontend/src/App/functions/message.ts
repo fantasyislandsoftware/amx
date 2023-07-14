@@ -1,10 +1,15 @@
+import { get } from "lodash";
 import {
   EnumMessageAction,
   EnumMessageObj,
   TMessage,
 } from "../interfaces/message";
 import { useIntuitionStore } from "../stores/useIntuitionStore";
-import { screenIdToIndex } from "./screen";
+import {
+  getHeighestWindowZIndex,
+  getLowestWindowZIndex,
+  screenIdToIndex,
+} from "./screen";
 import { windowIdToIndex } from "./windows";
 
 export const processMessage = (message: TMessage) => {
@@ -43,6 +48,21 @@ const processWindowMessage = (
       screens[screenIndex].windows[windowIndex] = null;
       setScreens(screens);
       setSelectedWindow(null);
+      break;
+    case EnumMessageAction.ORDER:
+      console.log("order");
+      const current = screens[screenIndex].windows[windowIndex].zOrder;
+      const low = getLowestWindowZIndex(screens[screenIndex].windows);
+      const high = getHeighestWindowZIndex(screens[screenIndex].windows);
+
+      if (current < high) {
+        screens[screenIndex].windows[windowIndex].zOrder = high + 1;
+      }
+      if (current > low) {
+        screens[screenIndex].windows[windowIndex].zOrder = low - 1;
+      }
+      setScreens(screens);
+
       break;
     default:
   }

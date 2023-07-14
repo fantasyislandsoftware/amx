@@ -12,9 +12,7 @@ const Screens: FC<Props> = ({ processMessage }) => {
   return (
     <>
       {screens.map((screen, index) => {
-        return (
-          <Screen key={index} screen={screen} processMessage={processMessage} />
-        );
+        return <Screen key={index} screen={screen} processMessage={processMessage} />;
       })}
     </>
   );

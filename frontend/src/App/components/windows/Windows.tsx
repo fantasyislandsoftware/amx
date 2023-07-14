@@ -29,3 +29,20 @@ const Windows: FC<Props> = ({ ctx, palette, windowProps }) => {
 };
 
 export default Windows;
+
+/*
+<>
+      {windowProps.map((windowProp, index) => {
+        if (windowProp !== undefined) {
+          return (
+            <Window
+              key={index}
+              ctx={ctx}
+              palette={palette}
+              windowProps={windowProp}
+            />
+          );
+        }
+      })}
+    </>
+*/

@@ -47,7 +47,7 @@ export const workbench = (id: number): TScreen => {
         id: 0,
         x: 50,
         y: 50,
-        width: 100,
+        width: 120,
         height: 100,
         titleBar: {
           text: "Window 1",
@@ -57,7 +57,7 @@ export const workbench = (id: number): TScreen => {
       },
       null,
       {
-        id: 2,
+        id: 1,
         x: 80,
         y: 80,
         width: 200,
@@ -67,6 +67,18 @@ export const workbench = (id: number): TScreen => {
           buttons: [closeButton.get(), orderButton.get()],
         },
         zOrder: 1,
+      },
+      {
+        id: 2,
+        x: 10,
+        y: 20,
+        width: 120,
+        height: 100,
+        titleBar: {
+          text: "Window 3",
+          buttons: [closeButton.get(), orderButton.get()],
+        },
+        zOrder: 2,
       },
     ],
   };

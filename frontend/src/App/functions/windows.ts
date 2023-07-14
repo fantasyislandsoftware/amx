@@ -1,6 +1,6 @@
 import { TWindow } from "../interfaces/window";
 
-const orderWindowsByZIndex = (windows: TWindow[]) => {
+export const orderWindowsByZIndex = (windows: TWindow[]) => {
   return windows.sort((a, b) => {
     if (a !== null && b !== null) {
       if (a.zOrder < b.zOrder) {

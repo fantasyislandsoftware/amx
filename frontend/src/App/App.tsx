@@ -10,8 +10,9 @@ import Screens from "./components/screens/Screens";
 import { _12BitColour } from "./functions/colour";
 import { TMessage } from "./interfaces/message";
 import { screenIdToIndex } from "./functions/screen";
-import { windowIdToIndex } from "./functions/windows";
+import { orderWindowsByZIndex, windowIdToIndex } from "./functions/windows";
 import { processMessage } from "./functions/message";
+import { set } from "lodash";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false);

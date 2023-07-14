@@ -10,7 +10,11 @@ import { dragElement } from "../../functions/drag";
 import { useIntuitionStore } from "../../stores/useIntuitionStore";
 import { useMouseStore } from "../../stores/useMouseStore";
 import { EnumMouseButton } from "../../interfaces/input";
-import { findWindow, windowIdToIndex } from "../../functions/windows";
+import {
+  findWindow,
+  orderWindowsByZIndex,
+  windowIdToIndex,
+} from "../../functions/windows";
 import { calcScreenElements } from "../../functions/calcElements/calcScreenElements";
 import { calcWindowElements } from "../../functions/calcElements/calcWindowElements";
 import {

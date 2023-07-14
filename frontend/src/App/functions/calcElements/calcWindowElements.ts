@@ -24,6 +24,7 @@ export type TCalcWindowElement = {
     y: number;
     width: number;
     height: number;
+    zOrder: number;
   };
   titleBar:
     | {
@@ -64,6 +65,7 @@ export const calcWindowElements = (screen: TScreen): TCalcWindowElement[] => {
         y: window.y,
         width: window.width,
         height: window.height,
+        zOrder: window.zOrder,        
       };
 
       /* Titlebar */
