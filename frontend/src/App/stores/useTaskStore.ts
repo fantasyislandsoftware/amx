@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import TTask from "../interfaces/task";
+import { TTask } from "../interfaces/task";
 
 export interface TaskStore {
   tasks: TTask[];

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { TScreen } from "../interfaces/screen";
-import { amx } from "../presets/screens";
+import { amx, workbench } from "../presets/screens";
 import { TSettings } from "../interfaces/settings";
 import { orderWindowsByZIndex } from "../functions/windows";
 import { clearNulls } from "../functions/arrayHandler";
@@ -21,6 +21,8 @@ export interface IntuitionStore {
   setNextAvailScreenId: (nextAvailScreenId: number) => void;
   selectedWindow: SelectedWindow | null;
   setSelectedWindow: (selectedWindow: SelectedWindow | null) => void;
+  publicScreen: number;
+  setPublicScreen: (publicScreen: number) => void;
 }
 
 export const useIntuitionStore = create<IntuitionStore>((set) => ({
@@ -57,7 +59,7 @@ export const useIntuitionStore = create<IntuitionStore>((set) => ({
   setSettings: (settings) => {
     set({ settings });
   },
-  screens: [amx(0)],
+  screens: [amx(0), workbench(1)],
   setScreens: (screens) => {
     screens.map((screen) => {
       screen.windows = clearNulls(screen.windows);
@@ -71,4 +73,6 @@ export const useIntuitionStore = create<IntuitionStore>((set) => ({
   setNextAvailScreenId: (nextAvailScreenId) => set({ nextAvailScreenId }),
   selectedWindow: null,
   setSelectedWindow: (selectedWindow) => set({ selectedWindow }),
+  publicScreen: 1,
+  setPublicScreen: (publicScreen) => set({ publicScreen }),
 }));

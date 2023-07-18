@@ -55,7 +55,7 @@ export const workbench = (id: number): TScreen => {
         },
         zOrder: 0,
       },
-      null,
+      /*null,
       {
         id: 1,
         x: 80,
@@ -79,7 +79,7 @@ export const workbench = (id: number): TScreen => {
           buttons: [closeButton.get(), orderButton.get()],
         },
         zOrder: 2,
-      },
+      },*/
     ],
   };
 };
@@ -94,4 +94,8 @@ export const workbench2: TScreen = {
   order: 0,
   y: 0,
   windows: [],
+};
+
+export const openScreen = () => {
+  console.log("openScreen");
 };

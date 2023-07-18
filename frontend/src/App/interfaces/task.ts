@@ -1,8 +1,11 @@
-type TTask = {
+export type TTask = {
   id: number;
   codePointer: number;
   code: string[];
-  variables: { [key: string]: any };
+  state: EnumTaskState;
 };
 
-export default TTask;
+export enum EnumTaskState {
+  Running,
+  Stopped,
+}

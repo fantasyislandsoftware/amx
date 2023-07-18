@@ -1,3 +1,0 @@
-openWBScreen();
-loop:
-    jmp(loop);

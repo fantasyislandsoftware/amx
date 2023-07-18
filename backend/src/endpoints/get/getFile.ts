@@ -12,10 +12,7 @@ const byteCheck = (data: any, bytes: any[]) => {
 export const getFile = (app: any) => {
   app.get("/getFile", async (req: any, res: any, next: any) => {
     const data = fs.readFileSync("/home/node/app" + req.query.path);
-    let fileInfo = { type: "unknown", data: data.toString() };
-    if (byteCheck(data, [0x2f, 0x2f, 0x40, 0x41, 0x4d, 0x58, 0x4a, 0x53])) {
-      fileInfo.type = "amxjs";
-    }
+    let fileInfo = { type: "unknown", data: data.toString() };    
     try {
       res.json(fileInfo);
     } catch (error) {
