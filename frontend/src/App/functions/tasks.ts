@@ -9,11 +9,52 @@ import { convertStringToArray } from "./arrayHandlers";
 import { CloseButton, OrderButton } from "../presets/buttons";
 import { loadFile } from "./fileIO";
 
+export function makeQuerablePromise(promise: any) {
+  // Don't modify any promise that has been already modified.
+  if (promise.isFulfilled) return promise;
+
+  // Set initial state
+  var isPending = true;
+  var isRejected = false;
+  var isFulfilled = false;
+  var data: any = null;
+
+  // Observe the promise, saving the fulfillment in a closure scope.
+  var result = promise.then(
+    function (v: any) {
+      isFulfilled = true;
+      isPending = false;
+      data = v;
+      return v;
+    },
+    function (e: any) {
+      isRejected = true;
+      isPending = false;
+      throw e;
+    }
+  );
+
+  result.isFulfilled = function () {
+    return isFulfilled;
+  };
+  result.isPending = function () {
+    return isPending;
+  };
+  result.isRejected = function () {
+    return isRejected;
+  };
+  result.getData = function () {
+    return data;
+  };
+  return result;
+}
+
+
 const filterCode = (code: string[]) => {
   let result: string[] = [];
   code.map((line) => {
     line = line.trim();
-    if (line.startsWith("//")) return;
+    if (line.startsWith("//") || line.startsWith("/*")) return;
     if (line.endsWith(":")) line = `/*${line}*/`;
     if (line === "") return;
     result.push(line);
@@ -21,8 +62,18 @@ const filterCode = (code: string[]) => {
   return result;
 };
 
+const convertScriptToJS = (script: string) => {
+  const commands = ["loadwb", "endcli"];
+  commands.map((command: string) => {
+    //@ts-ignore
+    script = script.replaceAll(command, `task.result = startTask("/src/amxjs/${command}.js");`);
+  });
+  const lines = convertStringToArray(script);
+  return lines;
+};
+
 const startJS = (data: any) => {
-  const code: string[] = filterCode(convertStringToArray(data));
+  const code: string[] = filterCode(convertStringToArray(data.toString()));
   const tasks = useTaskStore.getState().tasks;
   const id = tasks.length + 1;
   const task: TTask = {
@@ -53,17 +104,22 @@ const getTaskState = (id: number) => {
   return state;
 };
 
-const jmp = (task: any, label: string) => {
-  let index = null;
-  for (let i = 0; i < task.code.length; i++) {
-    if (task.code[i] === `/*${label}:*/`) {
+const equals = (a: any, b: any) => {
+  return a === b;
+};
+
+const beginLoop = Function;
+
+const endLoop = (task: any, label: string, cflag: boolean) => {
+  let index = task.codePointer;
+  task.code.map((line: string, i: number) => {
+    if (line === `beginLoop("${label}");` && cflag) {
       index = i;
+      return;
     }
-  }
-  if (index === null) {
-    throw new Error("Label not found");
-  }
-  task.codePointer = index - 1;
+  });
+
+  task.codePointer = index;
 };
 
 const openWBScreen = () => {
@@ -104,9 +160,9 @@ const openWindow = (
   setScreens(screens);
 };
 
-const loadScript = async (path: string) => {
-  const fileInfo: FileInfo = await loadFile(path);
-  return convertStringToArray(fileInfo.data);
+const loadScript = (path: string) => {
+  const x = loadFile(path);
+  return makeQuerablePromise(x);
 };
 
 const processCommand = (task: any, command: string) => {

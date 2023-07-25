@@ -1,4 +1,4 @@
-export const convertStringToArray = (buffer: Buffer) => {
-  const lines = buffer.toString().split("\n");
+export const convertStringToArray = (str: string) => {
+  const lines = str.split("\n");
   return lines;
 };

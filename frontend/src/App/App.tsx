@@ -22,8 +22,9 @@ const App = () => {
   });
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      startTask("/src/amxjs/cli.js");
+
+  const timer = setTimeout(async () => {
+      startTask("/src/amxjs/boot.js");
       return () => clearInterval(timer);
     }, 1);
 
@@ -49,3 +50,4 @@ const App = () => {
 };
 
 export default App;
+
