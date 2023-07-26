@@ -22,9 +22,12 @@ const App = () => {
   });
 
   useEffect(() => {
-
-  const timer = setTimeout(async () => {
-      startTask("/src/amxjs/newcli.js",'/data/hd/System/s/Startup-sequence');
+    const timer = setTimeout(async () => {
+      startTask(
+        undefined,
+        "/src/amxjs/newcli.js",
+        "/data/hd/System/s/Startup-sequence"
+      );
       return () => clearInterval(timer);
     }, 1);
 
@@ -50,4 +53,3 @@ const App = () => {
 };
 
 export default App;
-

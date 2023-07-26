@@ -12,7 +12,7 @@ task.result = loadScript(task.params);
 beginLoop("lp_load_script");
 task.c = equals(task.result.isFulfilled(), true);
 endLoop(task, "lp_load_script", !task.c);
-task.script = convertScriptToJS(task.result.getData().data);
+task.script = convertScriptToJS(task.screenId, task.result.getData().data);
 
 /*************************/
 /** Process script *******/

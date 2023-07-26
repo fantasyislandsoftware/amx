@@ -1,5 +1,6 @@
 export type TTask = {
   id: number;
+  parentId: number;
   codePointer: number;
   code: string[];
   params: string;

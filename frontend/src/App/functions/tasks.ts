@@ -32,25 +32,26 @@ const filterCode = (code: string[]) => {
   return result;
 };
 
-const convertScriptToJS = (script: string) => {
+const convertScriptToJS = (parentId: number, script: string) => {
   const commands = ["loadwb", "endcli"];
   commands.map((command: string) => {
     //@ts-ignore
     script = script.replaceAll(
       command,
-      `task.result = startTask("/src/amxjs/${command}.js");`
+      `task.result = startTask(${parentId},"/src/amxjs/${command}.js");`
     );
   });
   const lines = convertStringToArray(script);
   return lines;
 };
 
-const startJS = (data: any, params: string) => {
+const startJS = (parentId: number, data: any, params: string) => {
   const code: string[] = filterCode(convertStringToArray(data.toString()));
   const tasks = useTaskStore.getState().tasks;
   const id = tasks.length + 1;
   const task: TTask = {
     id: id,
+    parentId: parentId,
     codePointer: 0,
     code: code,
     params: params,
@@ -60,10 +61,14 @@ const startJS = (data: any, params: string) => {
   return id;
 };
 
-export const startTask = async (path: string, params: string) => {
+export const startTask = async (
+  parentId: number,
+  path: string,
+  params: string
+) => {
   const fileInfo: FileInfo = await loadFile(path);
   if (fileInfo.type === "unknown") {
-    return startJS(fileInfo.data, params);
+    return startJS(parentId, fileInfo.data, params);
   }
 };
 
