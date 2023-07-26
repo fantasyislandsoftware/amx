@@ -1,4 +1,4 @@
-export function MakeQuerablePromise(promise: any) {
+export function makeQuerablePromise(promise: any) {
   // Don't modify any promise that has been already modified.
   if (promise.isFulfilled) return promise;
 

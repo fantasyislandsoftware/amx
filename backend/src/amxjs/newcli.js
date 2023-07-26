@@ -1,10 +1,14 @@
-console.log("boot init");
+console.log("New CLI");
+
+task.screenId = getPublicScreenId();
+
+openWindow(task.screenId,0,20,200,100,'New CLI', {order: true, close: true});
 
 /*************************/
 /** Load script **********/
 /*************************/
 
-task.result = loadScript("/data/hd/System/s/Startup-sequence");
+task.result = loadScript(task.params);
 beginLoop("lp_load_script");
 task.c = equals(task.result.isFulfilled(), true);
 endLoop(task, "lp_load_script", !task.c);
@@ -23,17 +27,18 @@ task.line = task.script[task.lineIndex];
 /** Get task id **********/
 /*************************/
 
-task.id = eval(task.line);
-task.id.then(function (result) { task.id = result; });
+task.getSubTaskId = eval(task.line);
+task.subTaskId = undefined;
+task.getSubTaskId.then(function (result) { task.subTaskId = result; });
 beginLoop("lp_get_task_id_loop");
-endLoop(task,"lp_get_task_id_loop", task.id === undefined);
+endLoop(task,"lp_get_task_id_loop", task.subTaskId === undefined);
 
 /*************************/
 /** Task wait ************/
 /*************************/
 
 beginLoop("lp_wait_for_task_end_loop");
-task.currentState = getTaskState(task.id);
+task.currentState = getTaskState(task.subTaskId);
 endLoop(task,"lp_wait_for_task_end_loop", task.currentState !== 1);
 
 /*************************/

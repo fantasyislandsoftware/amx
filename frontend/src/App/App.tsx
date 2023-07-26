@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
 
   const timer = setTimeout(async () => {
-      startTask("/src/amxjs/boot.js");
+      startTask("/src/amxjs/newcli.js",'/data/hd/System/s/Startup-sequence');
       return () => clearInterval(timer);
     }, 1);
 

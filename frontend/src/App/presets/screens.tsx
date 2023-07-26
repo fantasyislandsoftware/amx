@@ -39,11 +39,11 @@ export const workbench = (id: number): TScreen => {
       _12BitColour(0, 6, 15),
       _12BitColour(10, 10, 10),
     ],
-    titleBar: { text: "Workbench", fontSize: 16, padding: 1 },
+    titleBar: { text: "Workbench Screen", fontSize: 16, padding: 1 },
     order: 1,
     y: 0,
     windows: [
-      {
+      /*{
         id: 0,
         x: 50,
         y: 50,
@@ -55,7 +55,7 @@ export const workbench = (id: number): TScreen => {
         },
         zOrder: 0,
       },
-      /*null,
+      null,
       {
         id: 1,
         x: 80,

@@ -1,9 +1,10 @@
 export type TTask = {
   id: number;
   codePointer: number;
-  code: string[];    
+  code: string[];
+  params: string;
   state: EnumTaskState;
-  c? : boolean;
+  c?: boolean;
 };
 
 export enum EnumTaskState {
