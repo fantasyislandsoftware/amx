@@ -1,3 +1,5 @@
+import { EnumIntuitionGadgetType } from "./generic";
+
 export type TTask = {
   id: number;
   parentId: number;
@@ -5,7 +7,13 @@ export type TTask = {
   code: string[];
   params: string;
   state: EnumTaskState;
+  objects: TOwnedComponent[];
   c?: boolean;
+};
+
+export type TOwnedComponent = {
+  uniqueId: string;
+  type: EnumIntuitionGadgetType;
 };
 
 export enum EnumTaskState {

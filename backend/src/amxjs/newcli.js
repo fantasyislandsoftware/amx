@@ -1,8 +1,7 @@
 console.log("New CLI");
 
 task.screenId = getPublicScreenId();
-
-openWindow(task.screenId,0,20,200,100,'New CLI', {order: true, close: true});
+openWindow(task,task.screenId,0,20,200,100,'New CLI',{order: true, close: true});
 
 /*************************/
 /** Load script **********/
@@ -12,7 +11,7 @@ task.result = loadScript(task.params);
 beginLoop("lp_load_script");
 task.c = equals(task.result.isFulfilled(), true);
 endLoop(task, "lp_load_script", !task.c);
-task.script = convertScriptToJS(task.screenId, task.result.getData().data);
+task.script = convertScriptToJS(task.id, task.result.getData().data);
 
 /*************************/
 /** Process script *******/

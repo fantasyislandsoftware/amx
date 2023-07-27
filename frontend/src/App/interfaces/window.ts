@@ -1,7 +1,8 @@
-import { EnumButtonState, TButton } from "./button";
+import { TButton } from "./button";
 
 export type TWindow = {
   id: number;
+  uniqueId: string;
   x: number;
   y: number;
   width: number;

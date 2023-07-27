@@ -1,4 +1,5 @@
 import { _12BitColour } from "../functions/colour";
+import { generateUUID } from "../functions/generators";
 import { EnumButtonState } from "../interfaces/button";
 import {
   EnumColorMax,
@@ -13,6 +14,7 @@ import { CloseButton, OrderButton } from "./buttons";
 export const amx = (id: number): TScreen => {
   return {
     id: id,
+    uniqueId: generateUUID(),
     type: EnumScreenType.INTUITION,
     mode: ScreenModeLowRes,
     numberOfColours: EnumColorMax.COLOUR_8,
@@ -30,6 +32,7 @@ const orderButton = new OrderButton();
 export const workbench = (id: number): TScreen => {
   return {
     id: id,
+    uniqueId: generateUUID(),
     type: EnumScreenType.INTUITION,
     mode: ScreenModeLowRes,
     numberOfColours: EnumColorMax.COLOUR_8,
@@ -82,18 +85,6 @@ export const workbench = (id: number): TScreen => {
       },*/
     ],
   };
-};
-
-export const workbench2: TScreen = {
-  id: 1,
-  type: EnumScreenType.INTUITION,
-  mode: ScreenModeHiRes,
-  numberOfColours: EnumColorMax.COLOUR_8,
-  palette: ["black", "white"],
-  titleBar: { text: "Workbench2", fontSize: 16, padding: 1 },
-  order: 0,
-  y: 0,
-  windows: [],
 };
 
 export const openScreen = () => {

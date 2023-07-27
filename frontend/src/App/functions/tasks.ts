@@ -8,7 +8,11 @@ import { convertStringToArray } from "./arrayHandlers";
 import { loadFile } from "./fileIO";
 import { makeQuerablePromise } from "./promiseHandlers";
 import { equals as _equals } from "./j/logic";
-import { getTaskState as _getTaskState } from "./j/task";
+import {
+  getTaskState as _getTaskState,
+  killTask as _killTask,
+  getTasks as _getTasks,
+} from "./j/task";
 import { endLoop as _endLoop } from "./j/logic";
 import { openWindow as _openWindow } from "./j/window";
 import { getPublicScreenId as _getPublicScreenId } from "./j/screen";
@@ -17,6 +21,8 @@ const equals = _equals;
 const beginLoop = Function;
 const endLoop = _endLoop;
 const getTaskState = _getTaskState;
+const getTasks = _getTasks;
+const killTask = _killTask;
 const openWindow = _openWindow;
 const getPublicScreenId = _getPublicScreenId;
 
@@ -56,6 +62,7 @@ const startJS = (parentId: number, data: any, params: string) => {
     code: code,
     params: params,
     state: EnumTaskState.Running,
+    objects: [],
   };
   tasks.push(task);
   return id;
@@ -80,8 +87,8 @@ const openWBScreen = () => {
 };
 
 const loadScript = (path: string) => {
-  const x = loadFile(path);
-  return makeQuerablePromise(x);
+  const file = loadFile(path);
+  return makeQuerablePromise(file);
 };
 const processCommand = (task: TTask, command: string) => {
   eval(command);
@@ -90,15 +97,17 @@ const processCommand = (task: TTask, command: string) => {
 export const runTasks = (screens: TScreen[], setScreens: any) => {
   const { tasks, setTasks } = useTaskStore.getState();
   tasks.map((task) => {
-    if (task.state === EnumTaskState.Stopped) return;
-    let command = task.code[task.codePointer];
-    processCommand(task, command);
+    if (task !== null) {
+      if (task.state === EnumTaskState.Stopped) return;
+      let command = task.code[task.codePointer];
+      processCommand(task, command);
 
-    if (task.codePointer === task.code.length - 1) {
-      task.state = EnumTaskState.Stopped;
-      task.code = [];
+      if (task.codePointer === task.code.length - 1) {
+        task.state = EnumTaskState.Stopped;
+        task.code = [];
+      }
+      task.codePointer++;
     }
-    task.codePointer++;
   });
   setTasks(tasks);
 };

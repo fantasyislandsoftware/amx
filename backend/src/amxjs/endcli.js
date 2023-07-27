@@ -1,2 +1,1 @@
-console.log('another one');
-console.log(task);
+killTask(task.parentId);

@@ -3,6 +3,7 @@ import { TWindow } from "./window";
 export type TScreen = {
   type: EnumScreenType;
   id: number;
+  uniqueId: String;
   mode: TypeScreenMode;
   numberOfColours: 8;
   palette: string[];
