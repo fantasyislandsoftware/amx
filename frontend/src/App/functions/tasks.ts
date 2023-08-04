@@ -44,7 +44,7 @@ const convertScriptToJS = (parentId: number, script: string) => {
     //@ts-ignore
     script = script.replaceAll(
       command,
-      `task.result = startTask(${parentId},"/src/amxjs/${command}.js");`
+      `task.result = startTask(${parentId},"/amxjs/${command}.js");`
     );
   });
   const lines = convertStringToArray(script);
@@ -73,7 +73,7 @@ export const startTask = async (
   path: string,
   params: string
 ) => {
-  const fileInfo: FileInfo = await loadFile(path);
+  const fileInfo: FileInfo = await loadFile(path, "internal");
   if (fileInfo.type === "unknown") {
     return startJS(parentId, fileInfo.data, params);
   }
@@ -87,7 +87,7 @@ const openWBScreen = () => {
 };
 
 const loadScript = (path: string) => {
-  const file = loadFile(path);
+  const file = loadFile(path, "external");
   return makeQuerablePromise(file);
 };
 const processCommand = (task: TTask, command: string) => {
@@ -98,15 +98,15 @@ export const runTasks = (screens: TScreen[], setScreens: any) => {
   const { tasks, setTasks } = useTaskStore.getState();
   tasks.map((task) => {
     if (task !== null) {
-      if (task.state === EnumTaskState.Stopped) return;
+      if (task.state === EnumTaskState.Ended) return;
       let command = task.code[task.codePointer];
       processCommand(task, command);
 
       if (task.codePointer === task.code.length - 1) {
-        task.state = EnumTaskState.Stopped;
-        task.code = [];
+        //task.state = EnumTaskState.Ended;
+        killTask(task.id);
       }
-      task.codePointer++;
+      if (task !== null) task.codePointer++;
     }
   });
   setTasks(tasks);

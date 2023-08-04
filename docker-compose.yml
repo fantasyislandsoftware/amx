@@ -6,8 +6,8 @@ services:
       target: backend
     volumes:
       - type: bind
-        source: ./data
-        target: /home/node/app/data
+        source: ./hd/dh0
+        target: /mnt/dh0
       - ./backend/src:/home/node/app/src
       - ./backend/nodemon.json:/home/node/app/nodemon.json
     container_name: amx

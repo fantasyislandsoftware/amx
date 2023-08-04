@@ -18,5 +18,5 @@ export type TOwnedComponent = {
 
 export enum EnumTaskState {
   Running,
-  Stopped,
+  Ended,
 }

@@ -5,8 +5,9 @@ var cors = require("cors");
 const app = express();
 
 import { getFile } from "./endpoints/get/getFile";
-import { getListDir } from "./endpoints/get/getListDir";
+//import { getListDir } from "./endpoints/get/getListDir";
 import { postCompileApps } from "./endpoints/post/postCompileApp";
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* GET */
 getFile(app);
-getListDir(app);
+//getListDir(app);
 
 /* POST */
 postCompileApps(app);

@@ -1,6 +1,5 @@
 import { opendirSync, readFileSync } from "fs";
 
-import { icon2Png } from "../../lib/amigaIconConverter/png";
 var PNG = require("pngjs").PNG;
 import { isDir, parseInfoFile } from "../../lib/fileManagement";
 

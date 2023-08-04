@@ -1,5 +1,5 @@
 import { EnumIntuitionGadgetType } from "../../interfaces/generic";
-import { useIntuitionStore } from "../../stores/useIntuitionStore";
+import { EnumTaskState } from "../../interfaces/task";
 import { useTaskStore } from "../../stores/useTaskStore";
 import { closeWindowByUniqueId } from "./window";
 
@@ -30,7 +30,7 @@ export const killTask = (id: number) => {
         /* Close all screens */
 
         /* Close task */
-        tasks[index] = null;
+        tasks[index].state = EnumTaskState.Ended;
       }
     }
   });

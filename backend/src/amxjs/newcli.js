@@ -45,6 +45,14 @@ endLoop(task,"lp_wait_for_task_end_loop", task.currentState !== 1);
 /*************************/
 
 task.lineIndex++;
+
 endLoop(task, "lp_process_script_loop", task.lineIndex < task.lineCount);
+
+/*************************/
+/** Input loop ************/
+/*************************/
+
+beginLoop("lp_input");
+endLoop(task, "lp_input", true);
 
 console.log("boot finished");

@@ -13,6 +13,8 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
   const { screens, setScreens } = useIntuitionStore((state) => state);
   const [runMode] = useState<"normal" | "debug">("debug");
+  const { tasks } = useTaskStore((state) => state);
+
   const test = async () => {
     const x = await compileApps();
   };
@@ -22,12 +24,12 @@ const App = () => {
   });
 
   useEffect(() => {
+    const test = setTimeout(() => {
+      console.log(tasks);
+    }, 6000);
+
     const timer = setTimeout(async () => {
-      startTask(
-        undefined,
-        "/src/amxjs/newcli.js",
-        "/data/hd/System/s/Startup-sequence"
-      );
+      startTask(undefined, "/amxjs/newcli.js", "/mnt/dh0/s/Startup-sequence");
       return () => clearInterval(timer);
     }, 1);
 
