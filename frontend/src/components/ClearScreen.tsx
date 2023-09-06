@@ -1,6 +1,5 @@
 import React from "react";
 import { FC } from "react";
-import { useMouseStore } from "../stores/useMouseStore";
 import { TScreen } from "../interfaces/screen";
 import { TContext } from "../interfaces/canvas";
 

@@ -1,9 +1,5 @@
 import React, { FC, useState } from "react";
 import { TScreen } from "../interfaces/screen";
-import { EnumMouseButton } from "../interfaces/input";
-import { useMouseStore } from "../stores/useMouseStore";
-import { useIntuitionStore } from "../stores/useIntuitionStore";
-import { findWindow, windowIdToIndex } from "../functions/windows";
 
 interface Props {
   children: any;
@@ -24,8 +20,8 @@ const Canvas: FC<Props> = ({
 }) => {
   return (
     <canvas
-      width={screen.mode.width}
-      height={screen.mode.height}
+      //width={screen.mode.width}
+      //height={screen.mode.height}
       style={{
         imageRendering: "pixelated",
         fontSmooth: "never",

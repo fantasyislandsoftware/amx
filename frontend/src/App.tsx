@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./css/base.css";
-import { compileApps } from "../api/functions/post/compileApps";
+import { compileApps } from "./api/functions/post/compileApps";
 import { loadFonts } from "./functions/fonts";
 import { useIntuitionStore } from "./stores/useIntuitionStore";
 import { runTasks, startTask } from "./functions/tasks";

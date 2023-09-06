@@ -1,6 +1,4 @@
 import React, { FC } from "react";
-import { TWindow } from "../../interfaces/window";
-import { TScreen } from "../../interfaces/screen";
 import { TContext } from "../../interfaces/canvas";
 import {
   TCalcButtonElement,
