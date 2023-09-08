@@ -10,11 +10,15 @@ export interface ITitleBar {
     name: string;
   };
   text: string;
+  height?: number;
 }
 
 export interface IScreen {
-  id: number;
+  id?: number;
   mode: IScreenMode;
-  top: number;
+  top?: number;
   titleBar?: ITitleBar;
+  titleBarContext?: CanvasRenderingContext2D;
+  clientContext?: CanvasRenderingContext2D;
+  palette: string[];
 }

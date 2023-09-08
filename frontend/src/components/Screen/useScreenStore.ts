@@ -17,20 +17,10 @@ export interface ScreenStore {
   setDragScreen: (dragScreen: DragScreen) => void;
 }
 
-const amxScreen: IScreen = {
-  id: 0,
-  mode: {
-    width: 320,
-    height: 240,
-    bitDepth: 8,
-  },
-  top: 0,
-};
-
 export const useScreenStore = create<ScreenStore>((set) => ({
-  screens: [amxScreen],
+  screens: [],
   setScreens: (screens) => set({ screens }),
-  nextAvailableScreenId: 1,
+  nextAvailableScreenId: 0,
   incAvailableScreenId: () =>
     set((state) => ({
       nextAvailableScreenId: state.nextAvailableScreenId + 1,

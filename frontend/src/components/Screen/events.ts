@@ -11,7 +11,6 @@ export const evt = (
   processOSEvent: any,
   eventType: EnumOSEventType,
   screen: IScreen,
-  height: number
 ) => {
   const mouse = getMouse(event, screen);
   /* Screen */
@@ -24,7 +23,7 @@ export const evt = (
   /* Titlebar & Client */
   processOSEvent({
     object:
-      mouse.screen.y <= height - 1
+      mouse.screen.y <= screen.titleBar.height - 1
         ? EnumOSEventObjectType.Titlebar
         : EnumOSEventObjectType.Client,
     type: eventType,

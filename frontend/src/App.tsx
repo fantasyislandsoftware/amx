@@ -1,57 +1,144 @@
 import React, { useEffect, useState } from "react";
+import { useScreenStore } from "./components/Screen/useScreenStore";
+import ScreenContainer from "./components/Screen/components/ScreenContainer";
 import "./css/base.css";
-import { compileApps } from "./api/functions/post/compileApps";
-import { loadFonts } from "./functions/fonts";
-import { useIntuitionStore } from "./stores/useIntuitionStore";
-import { runTasks, startTask } from "./functions/tasks";
-import { useTaskStore } from "./stores/useTaskStore";
-import Screens from "./components/screens/Screens";
-import { _12BitColour } from "./functions/colour";
-import { processMessage } from "./functions/message";
+import {
+  EnumOSEventObjectType,
+  EnumOSEventType,
+  IOSEvent,
+} from "./interfaces/OSEvents";
+import { lowres } from "./presets/screenModes";
+import { assigned } from "./handlers/generalHandlers";
+import { createScreen, screenIdToIndex } from "./handlers/screenHandlers";
+import { default16ColourPalette } from "./presets/palettes";
 
 const App = () => {
-  const [loaded, setLoaded] = useState(false);
-  const { screens, setScreens } = useIntuitionStore((state) => state);
-  const [runMode] = useState<"normal" | "debug">("debug");
-  const { tasks } = useTaskStore((state) => state);
+  const [init, setInit] = useState(false);
+  const { screens, setScreens, dragScreen, setDragScreen } = useScreenStore(
+    (state) => state
+  );
 
-  const test = async () => {
-    const x = await compileApps();
+  //var myFont = new FontFace('myFont', 'url(fonts/myFont/AmigaTopazUnicideRus.ttf)');
+  //console.log(myFont);
+
+  const processOSEvent = (osEvent: IOSEvent) => {
+    if (osEvent.parent) {
+      switch (osEvent.parent.object) {
+        /* Screen */
+        case EnumOSEventObjectType.Screen:
+          switch (osEvent.object) {
+            /* Client */
+            case EnumOSEventObjectType.Client:
+              break;
+            /* Titlebar */
+            case EnumOSEventObjectType.Titlebar:
+              switch (osEvent.type) {
+                /* Mouse Down */
+                case EnumOSEventType.MouseDown:
+                  const screenIndex = screenIdToIndex(osEvent.parent.id);
+                  setDragScreen({
+                    id: osEvent.parent.id,
+                    offset: {
+                      y: osEvent.mouse.client.y - screens[screenIndex].top,
+                    },
+                  });
+                  break;
+                /* Mouse Up */
+                case EnumOSEventType.MouseUp:
+                  setDragScreen(undefined);
+                  break;
+              }
+              break;
+          }
+          break;
+      }
+    } else {
+      switch (osEvent.object) {
+        /* Screen */
+        case EnumOSEventObjectType.Screen:
+          switch (osEvent.type) {
+            /* Mouse Move */
+            case EnumOSEventType.MouseMove:
+              if (assigned(dragScreen)) {
+                const screenIndex = screenIdToIndex(dragScreen.id);
+                screens[screenIndex].top =
+                  osEvent.mouse.client.y - dragScreen.offset.y;
+                if (screens[screenIndex].top < 0) screens[screenIndex].top = 0;
+                setScreens([...screens]);
+              }
+              break;
+            /* Mouse Leave */
+            /*case EnumOSEventType.MouseLeave:
+              setDragScreen(undefined);
+              break;*/
+          }
+          break;
+      }
+    }
   };
 
-  loadFonts().then(() => {
-    setLoaded(true);
-  });
-
   useEffect(() => {
-    const test = setTimeout(() => {
-      console.log(tasks);
-    }, 6000);
+    if (init) return;
+    setTimeout(() => {
+      createScreen({
+        mode: lowres,
+        top: 0,
+        palette: default16ColourPalette,
+      });
+      createScreen({
+        mode: lowres,
+        top: 100,
+        titleBar: {
+          font: { size: 10, name: "arial" },
+          text: "ABCDEFGabcdefg",
+        },
+        palette: default16ColourPalette,
+      });
+      createScreen({
+        mode: lowres,
+        top: 200,
+        titleBar: {
+          font: { size: 10, name: "arial" },
+          text: "ABCDEFGabcdefg 2",
+        },
+        palette: default16ColourPalette,
+      });
 
-    const timer = setTimeout(async () => {
-      startTask(undefined, "/amxjs/newcli.js", "/mnt/dh0/s/Startup-sequence");
-      return () => clearInterval(timer);
-    }, 1);
+      setInit(true);
+    });
+  }, [init]);
 
-    if (runMode === "debug") {
-      const interval = setInterval(() => {
-        runTasks(screens, setScreens);
-      }, 100);
-      return () => clearInterval(interval);
-    } else {
-      const render = () => {
-        runTasks(screens, setScreens);
-        requestAnimationFrame(render);
-      };
-      render();
-    }
-  }, []);
-
-  if (!loaded) {
-    return null;
-  } else {
-    return <Screens processMessage={processMessage} />;
-  }
+  return (
+    <>
+      {screens.map((screen, index) => (
+        <ScreenContainer
+          key={index}
+          screen={screen}
+          processOSEvent={processOSEvent}
+        />
+      ))}
+      <canvas
+        id="clientCanvas"
+        style={{
+          display: "none",
+          imageRendering: "pixelated",
+          fontSmooth: "never",
+          WebkitFontSmoothing: "none",
+          backgroundColor: "grey",
+        }}
+      ></canvas>
+      <canvas
+        id="titleBarCanvas"
+        style={{
+          display: "none",
+          imageRendering: "pixelated",
+          fontSmooth: "never",
+          WebkitFontSmoothing: "none",
+          backgroundColor: "grey",
+        }}
+      ></canvas>
+    </>
+  );
 };
 
 export default App;
