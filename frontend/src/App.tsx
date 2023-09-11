@@ -15,11 +15,12 @@ import {
   screenIdToIndex,
 } from "./handlers/screenHandlers";
 import { default16ColourPalette } from "./presets/palettes";
+import { IScreen } from "./components/Screen/screenInterface";
 
 const App = () => {
   const [init, setInit] = useState(false);
   const { screens, setScreens, dragScreen, setDragScreen } = useScreenStore(
-    (state) => state
+    (state: any) => state
   );
 
   //var myFont = new FontFace('myFont', 'url(fonts/myFont/AmigaTopazUnicideRus.ttf)');
@@ -119,7 +120,7 @@ const App = () => {
 
   return (
     <>
-      {screens.map((screen, index) => (
+      {screens.map((screen: IScreen, index: number) => (
         <ScreenContainer
           key={index}
           screen={screen}
