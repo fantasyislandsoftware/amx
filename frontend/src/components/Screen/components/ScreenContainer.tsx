@@ -34,11 +34,12 @@ const ScreenContainer: FC<IProps> = ({ screen, processOSEvent }) => {
   return (
     <div
       style={{
-        background: "blue",
+        background: "#404040",
         position: "fixed",
         width: "100%",
         height: "100%",
         top: `${screen.top}px`,
+        zIndex: `${screen.zIndex}`,
       }}
     >
       <ScreenDisplayBuffer

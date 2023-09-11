@@ -9,7 +9,11 @@ import {
 } from "./interfaces/OSEvents";
 import { lowres } from "./presets/screenModes";
 import { assigned } from "./handlers/generalHandlers";
-import { createScreen, screenIdToIndex } from "./handlers/screenHandlers";
+import {
+  createScreen,
+  getHighestScreenZIndex,
+  screenIdToIndex,
+} from "./handlers/screenHandlers";
 import { default16ColourPalette } from "./presets/palettes";
 
 const App = () => {
@@ -36,6 +40,11 @@ const App = () => {
                 /* Mouse Down */
                 case EnumOSEventType.MouseDown:
                   const screenIndex = screenIdToIndex(osEvent.parent.id);
+                  /* Set screen to highest z-index */
+                  const newIndex = getHighestScreenZIndex() + 1;
+                  screens[screenIndex].zIndex = newIndex;
+                  setScreens([...screens]);
+                  /* Set drag screen */
                   setDragScreen({
                     id: osEvent.parent.id,
                     offset: {

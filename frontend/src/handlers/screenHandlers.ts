@@ -1,6 +1,5 @@
 import { IScreen } from "../components/Screen/screenInterface";
 import { useScreenStore } from "../components/Screen/useScreenStore";
-import { createCanvasContext } from "./canvasHandler";
 
 export const screenIdToIndex = (id: number): number | undefined => {
   const { screens } = useScreenStore.getState();
@@ -17,6 +16,16 @@ export const createScreen = (screen: IScreen) => {
   incAvailableScreenId();
   let newScreen = screen;
   newScreen.id = nextAvailableScreenId;
+  newScreen.zIndex = getHighestScreenZIndex() + 1;
   screens.push(newScreen);
   setScreens(screens);
+};
+
+export const getHighestScreenZIndex = () => {
+  const { screens } = useScreenStore.getState();
+  let result = 0;
+  screens.map((screen) => {
+    if (screen.zIndex > result) result = screen.zIndex;
+  });
+  return result;
 };

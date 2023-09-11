@@ -21,4 +21,5 @@ export interface IScreen {
   titleBarContext?: CanvasRenderingContext2D;
   clientContext?: CanvasRenderingContext2D;
   palette: string[];
+  zIndex?: number;
 }
