@@ -5,17 +5,17 @@ import "./css/base.css";
 import {
   EnumOSEventObjectType,
   EnumOSEventType,
-  IOSEvent,
+  type IOSEvent,
 } from "./interfaces/OSEvents";
 import { lowres } from "./presets/screenModes";
-import { assigned } from "./handlers/generalHandlers";
+import { assigned } from "./handlers/general";
 import {
   createScreen,
   getHighestScreenZIndex,
   screenIdToIndex,
-} from "./handlers/screenHandlers";
+} from "./handlers/screen";
 import { default16ColourPalette } from "./presets/palettes";
-import { IScreen } from "./components/Screen/screenInterface";
+import { type IScreen } from "./components/Screen/screenInterface";
 
 const App = () => {
   const [init, setInit] = useState(false);
@@ -23,10 +23,11 @@ const App = () => {
     (state: any) => state
   );
 
-  //var myFont = new FontFace('myFont', 'url(fonts/myFont/AmigaTopazUnicideRus.ttf)');
-  //console.log(myFont);
+  // var myFont = new FontFace('myFont', 'url(fonts/myFont/AmigaTopazUnicideRus.ttf)');
+  // console.log(myFont);
 
   const processOSEvent = (osEvent: IOSEvent) => {
+    console.log(osEvent);
     if (osEvent.parent) {
       switch (osEvent.parent.object) {
         /* Screen */
@@ -78,9 +79,9 @@ const App = () => {
               }
               break;
             /* Mouse Leave */
-            /*case EnumOSEventType.MouseLeave:
+            /* case EnumOSEventType.MouseLeave:
               setDragScreen(undefined);
-              break;*/
+              break; */
           }
           break;
       }

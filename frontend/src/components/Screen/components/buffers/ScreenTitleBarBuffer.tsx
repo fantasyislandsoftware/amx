@@ -1,7 +1,10 @@
-import React, { FC, useEffect, useRef } from "react";
-import { IScreen } from "../../screenInterface";
+import { type FC, useEffect, useRef } from "react";
+import { type IScreen } from "../../screenInterface";
 import { canvasRenderStyle } from "../../style";
 import { useScreenStore } from "../../useScreenStore";
+import { TVectorZone, drawVectorGfx } from "../../../../handlers/vectorGfx";
+import { orderIcon } from "../icons/orderIcon";
+import { assigned } from "../../../../handlers/general";
 
 interface IProps {
   screen: IScreen;
@@ -15,9 +18,10 @@ const ScreenTitleBarBuffer: FC<IProps> = ({ screen }) => {
   useEffect(() => {
     if (ref.current) {
       const ctx = ref.current.getContext("2d");
+      if (!ctx || !screen.titleBar) return;
 
       /* Set font and get metrics */
-      ctx.font = `${screen.titleBar.font.size}px ${screen.titleBar.font.name}`;
+      ctx.font = `${screen.titleBar?.font.size}px ${screen.titleBar?.font.name}`;
       const metrics = ctx.measureText(screen.titleBar.text);
       const height =
         Math.floor(
@@ -38,11 +42,26 @@ const ScreenTitleBarBuffer: FC<IProps> = ({ screen }) => {
         metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
       );
 
+      /* Draw Z-Order button */
+      let orderIconZone: TVectorZone | undefined = undefined;
+      if (screen.titleBar.height) {
+        orderIconZone = {
+          x: screen.mode.width - screen.titleBar.height,
+          y: 0,
+          w: screen.titleBar.height,
+          h: screen.titleBar.height,
+        };
+        drawVectorGfx(ctx, orderIconZone, orderIcon(0), screen.palette);
+      }
+
       /* Update screen store */
       screens.map((_screen) => {
-        if (_screen.id === screen.id) {
+        if (_screen.id === screen.id && _screen.titleBar) {
           _screen.titleBarContext = ctx;
           _screen.titleBar.height = height;
+          if (orderIconZone && _screen.titleBar.icons.order) {
+            _screen.titleBar.icons.order.zone = orderIconZone;
+          }
         }
       });
       setScreens([...screens]);

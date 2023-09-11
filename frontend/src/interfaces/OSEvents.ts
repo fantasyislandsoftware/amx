@@ -3,6 +3,7 @@ export enum EnumOSEventObjectType {
   Window = "window",
   Titlebar = "titlebar",
   Client = "client",
+  Icon = "icon",
 }
 
 export enum EnumOSEventType {
@@ -19,7 +20,7 @@ export enum EnumMouseButton {
   Right = 2,
 }
 
-export type IMouse = {
+export interface IMouse {
   client: {
     x: number;
     y: number;
@@ -29,9 +30,9 @@ export type IMouse = {
     y: number;
   };
   button: EnumMouseButton;
-};
+}
 
-export type IOSEvent = {
+export interface IOSEvent {
   object: EnumOSEventObjectType;
   id?: number;
   type: EnumOSEventType;
@@ -40,4 +41,4 @@ export type IOSEvent = {
     object: EnumOSEventObjectType;
     id: number;
   };
-};
+}

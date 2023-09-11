@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import { IScreen } from "../screenInterface";
+import { type FC, useEffect, useRef, useState } from "react";
+import { type IScreen } from "../screenInterface";
 import ScreenDisplayBuffer from "./buffers/ScreenDisplayBuffer";
 import ScreenTitleBarBuffer from "./buffers/ScreenTitleBarBuffer";
 import { evt } from "../events";
-import { EnumOSEventType, IOSEvent } from "../../../interfaces/OSEvents";
+import { EnumOSEventType, type IOSEvent } from "../../../interfaces/OSEvents";
 import ScreenClientBuffer from "./buffers/ScreenClientBuffer";
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
 const ScreenContainer: FC<IProps> = ({ screen, processOSEvent }) => {
   /* Display Canvas Context */
   const ref = useRef<HTMLCanvasElement>(null);
-  const [ctx, setCtx] = useState<CanvasRenderingContext2D>(null);
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
 
   /* Set display canvas context */
   useEffect(() => {

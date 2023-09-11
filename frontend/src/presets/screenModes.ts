@@ -1,7 +1,7 @@
-import { IScreenMode } from "../components/Screen/screenInterface";
+import { type IScreenMode } from '../components/Screen/screenInterface'
 
 export const lowres: IScreenMode = {
   width: 320,
   height: 240,
-  bitDepth: 8,
-};
+  bitDepth: 8
+}

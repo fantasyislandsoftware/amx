@@ -1,6 +1,5 @@
-import React from "react";
-import { FC } from "react";
-import { IScreen } from "../../screenInterface";
+import { type FC } from "react";
+import { type IScreen } from "../../screenInterface";
 import { canvasRenderStyle } from "../../style";
 
 interface IProps {

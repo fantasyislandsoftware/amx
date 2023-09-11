@@ -11,6 +11,17 @@ export interface ITitleBar {
   };
   text: string;
   height?: number;
+  icons: {
+    order?: {
+      zone: {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+      };
+      state: number;
+    };
+  };
 }
 
 export interface IScreen {
